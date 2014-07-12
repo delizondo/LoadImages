@@ -32,14 +32,6 @@ public class PhotoDetailFragment extends PhotoFragment {
         return new PhotoDetailFragment();
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (!ImageConfig.IsTablet()) {
-            setHasOptionsMenu(false);
-        }
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

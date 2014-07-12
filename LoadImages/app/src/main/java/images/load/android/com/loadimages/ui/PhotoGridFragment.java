@@ -2,14 +2,11 @@ package images.load.android.com.loadimages.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -22,7 +19,6 @@ import com.android.volley.VolleyError;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import images.load.android.com.loadimages.ImageConfig;
 import images.load.android.com.loadimages.R;
@@ -35,6 +31,7 @@ import images.load.android.com.loadimages.ui.adapter.PhotoAdapter;
 public class PhotoGridFragment extends PhotoFragment {
 
     private GridView mGridView;
+
 
     private int mPage = 1;
 
@@ -66,6 +63,11 @@ public class PhotoGridFragment extends PhotoFragment {
         mGridView = (GridView) view.findViewById(R.id.grid_view);
         mGridView.setOnScrollListener(gridScrollListener);
         mGridView.setOnItemClickListener(gridItemClickListener);
+        if (ImageConfig.IsTablet()) {
+            mGridView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+        } else {
+            mGridView.setChoiceMode(AbsListView.CHOICE_MODE_NONE);
+        }
         mProgressBar = (ProgressBar) view.findViewById(android.R.id.progress);
         return view;
     }
@@ -73,8 +75,7 @@ public class PhotoGridFragment extends PhotoFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main, menu);
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
 
         searchView.setOnQueryTextListener(querySearchListener);
         super.onCreateOptionsMenu(menu, inflater);
