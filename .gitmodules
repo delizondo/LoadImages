@@ -1,0 +1,3 @@
+[submodule "LoadImages/Volley"]
+	path = LoadImages/Volley
+	url = https://delizondo@android.googlesource.com/platform/frameworks/volley/
