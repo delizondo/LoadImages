@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="@drawable/grid_cell_background"
-    android:gravity="center"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+<images.load.android.com.loadimages.ui.CheckableLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                             android:orientation="vertical"
+                                                             android:background="@drawable/grid_cell_background"
+                                                             android:gravity="center"
+                                                             android:layout_width="wrap_content"
+                                                             android:layout_height="wrap_content">
 
     <com.android.volley.toolbox.NetworkImageView
         android:id="@id/photo_thumb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/grid_spacing" />
+        android:layout_width="@dimen/cell_size"
+        android:layout_height="@dimen/cell_size"
+        android:layout_margin="@dimen/grid_spacing"/>
 
-</LinearLayout>
+</images.load.android.com.loadimages.ui.CheckableLinearLayout>

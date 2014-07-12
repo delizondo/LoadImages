@@ -3,4 +3,5 @@
     <dimen name="grid_spacing">8dp</dimen>
     <dimen name="shape_margin">4dp</dimen>
     <dimen name="shape_size">40dp</dimen>
+    <dimen name="cell_size">120dp</dimen>
 </resources>

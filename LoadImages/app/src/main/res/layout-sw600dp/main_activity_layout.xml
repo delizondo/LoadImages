@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
 
     <fragment
+        android:id="@id/grid_fragment"
         android:layout_width="0dp"
         android:layout_weight="0.4"
         android:layout_height="match_parent"
         android:name="images.load.android.com.loadimages.ui.PhotoGridFragment"
-        tools:layout="@layout/grid_fragment_layout" />
+        tools:layout="@layout/grid_fragment_layout"/>
 
     <fragment
+        android:id="@id/detail_fragment"
         android:layout_width="0dp"
         android:layout_weight="0.7"
         android:layout_height="match_parent"
         android:name="images.load.android.com.loadimages.ui.PhotoDetailFragment"
-        tools:layout="@layout/detail_photo_layout" />
+        tools:layout="@layout/detail_photo_layout"/>
 
 </LinearLayout>

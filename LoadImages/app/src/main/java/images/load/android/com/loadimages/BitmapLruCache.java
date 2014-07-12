@@ -12,7 +12,7 @@ public class BitmapLruCache extends LruCache<String, Bitmap> implements
 
     public static int getDefaultLruCacheSize() {
         final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
-        final int cacheSize = maxMemory / 8;
+        final int cacheSize = maxMemory / 6;
         return cacheSize;
     }
 
@@ -46,11 +46,4 @@ public class BitmapLruCache extends LruCache<String, Bitmap> implements
         put(url, bitmap);
     }
 
-    public boolean contains(String key) {
-        return get(key) == null ? false : true;
-    }
-
-    public void clearCache() {
-        evictAll();
-    }
 }
