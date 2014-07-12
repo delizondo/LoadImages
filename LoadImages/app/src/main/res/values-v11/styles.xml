@@ -1,18 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="actionBarStyle">@style/FoodAppActionbar</item>
+        <item name="android:actionBarStyle">@style/FoodAppActionbar</item>
     </style>
 
     <style name="FoodAppActionbar" parent="Widget.AppCompat.Light.ActionBar.Solid">
-        <item name="background">@color/orange</item>
-        <item name="titleTextStyle">@style/FoodAppActionbar.TextStyle</item>
+        <item name="android:background">@color/orange</item>
+        <item name="android:titleTextStyle">@style/FoodAppActionbar.TextStyle</item>
     </style>
 
     <style name="FoodAppActionbar.TextStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@android:color/white</item>
     </style>
-
 
 </resources>
