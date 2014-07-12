@@ -3,8 +3,13 @@ package images.load.android.com.loadimages.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -43,8 +48,17 @@ public class PhotoGridFragment extends PhotoFragment {
 
     private ProgressBar mProgressBar;
 
+    private boolean mIsSearching;
+
+    private String mSearchText;
+
     private static final String TAG = PhotoGridFragment.class.getName();
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,6 +71,16 @@ public class PhotoGridFragment extends PhotoFragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main, menu);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        searchView.setOnQueryTextListener(querySearchListener);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         loadImages();
@@ -66,6 +90,12 @@ public class PhotoGridFragment extends PhotoFragment {
         showProgressBar(true);
         mIsLoading = true;
         LoadImagesAPI.getPhotoList(mPage, mPhotosListener, mErrorListener);
+    }
+
+    private void searchImages() {
+        showProgressBar(true);
+        mIsLoading = true;
+        LoadImagesAPI.getSearchPhoto(mPage, mSearchText, mPhotosListener, mErrorListener);
     }
 
     private void updateGridView(List<PhotoObject> list) {
@@ -121,7 +151,11 @@ public class PhotoGridFragment extends PhotoFragment {
             if (!mIsLoading && mPage < mTotalPages && (firstVisibleItem + visibleItemCount) >= mPhotoObjectList.size()) {
                 mPage++;
                 Log.i(TAG, "Displaying page: " + mPage + " out of: " + mTotalPages);
-                loadImages();
+                if (mIsSearching) {
+                    searchImages();
+                } else {
+                    loadImages();
+                }
             }
         }
     };
@@ -138,15 +172,32 @@ public class PhotoGridFragment extends PhotoFragment {
             mListener.setPhotoDescription(photoObject.getTitle());
 
 
-            if (!ImageConfig.IsTablet()) {
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.grid_fragment, PhotoDetailFragment.newInstance(), PhotoDetailFragment.TAG)
-                        .addToBackStack(null).commit();
-            } else {
+            if (ImageConfig.IsTablet()) {
                 getActivity().getSupportFragmentManager().beginTransaction()
                         .replace(R.id.detail_fragment, PhotoDetailFragment.newInstance(), PhotoDetailFragment.TAG)
                         .commit();
+            } else {
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.grid_fragment, PhotoDetailFragment.newInstance(), PhotoDetailFragment.TAG)
+                        .addToBackStack(null).commit();
             }
+        }
+    };
+
+    private SearchView.OnQueryTextListener querySearchListener = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String s) {
+            mIsSearching = true;
+            mSearchText = s;
+            mPage = 1;
+            mAdapter.clearAll();
+            searchImages();
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String s) {
+            return false;
         }
     };
 }

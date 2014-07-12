@@ -4,7 +4,7 @@
 
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/light_orange" />
+            <solid android:color="@color/light_orange"/>
 
         </shape>
     </item>
@@ -15,10 +15,10 @@
         android:top="@dimen/shape_margin">
 
         <shape android:shape="rectangle">
-            <solid android:color="@android:color/white" />
+            <solid android:color="@android:color/white"/>
             <size
                 android:height="@dimen/shape_size"
-                android:width="@dimen/shape_size" />
+                android:width="@dimen/shape_size"/>
 
         </shape>
 

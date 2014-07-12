@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Checkable;
 
 import com.android.volley.Response;
 import com.android.volley.toolbox.NetworkImageView;
@@ -36,6 +37,11 @@ public class PhotoAdapter extends BaseAdapter {
 
     public void addPhotos(List<PhotoObject> list) {
         mList.addAll(list);
+        notifyDataSetChanged();
+    }
+
+    public void clearAll(){
+        mList.clear();
         notifyDataSetChanged();
     }
 
@@ -74,7 +80,7 @@ public class PhotoAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public static class ViewHolder {
+    private class ViewHolder {
         private NetworkImageView mThumb;
     }
 }

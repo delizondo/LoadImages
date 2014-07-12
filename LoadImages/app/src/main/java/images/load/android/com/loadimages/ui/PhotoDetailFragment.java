@@ -3,13 +3,19 @@ package images.load.android.com.loadimages.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 
+import images.load.android.com.loadimages.ImageConfig;
 import images.load.android.com.loadimages.LoadImagesApplication;
 import images.load.android.com.loadimages.R;
 
@@ -24,6 +30,14 @@ public class PhotoDetailFragment extends PhotoFragment {
 
     public static PhotoDetailFragment newInstance() {
         return new PhotoDetailFragment();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (!ImageConfig.IsTablet()) {
+            setHasOptionsMenu(false);
+        }
     }
 
 

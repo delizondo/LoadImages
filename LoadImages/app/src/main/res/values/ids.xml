@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="photo_thumb" type="id" />
-    <item name="grid_view" type="id" />
-    <item name="photo_view" type="id" />
-    <item name="photo_desc" type="id" />
-    <item name="grid_fragment" type="id" />
-    <item name="detail_fragment" type="id" />
+    <item name="photo_thumb" type="id"/>
+    <item name="grid_view" type="id"/>
+    <item name="photo_view" type="id"/>
+    <item name="photo_desc" type="id"/>
+    <item name="grid_fragment" type="id"/>
+    <item name="detail_fragment" type="id"/>
+    <item name="action_search" type="id"/>
 </resources>
