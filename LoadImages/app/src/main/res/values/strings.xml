@@ -3,7 +3,7 @@
 
     <string name="app_name">LoadImages</string>
     <string name="title_image_detail">Image Detail</string>
-    <string name="api_key">0c3b7be3c0dafe29080ef61ac2001439</string>
+    <string name="api_key">3fda50fe0666723a4a532f3874b30eb2</string>
     <string name="images_per_page">15</string>
 
 </resources>
