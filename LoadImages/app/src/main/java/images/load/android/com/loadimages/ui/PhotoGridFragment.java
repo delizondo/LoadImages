@@ -63,6 +63,9 @@ public class PhotoGridFragment extends PhotoFragment {
         mGridView = (GridView) view.findViewById(R.id.grid_view);
         mGridView.setOnScrollListener(gridScrollListener);
         mGridView.setOnItemClickListener(gridItemClickListener);
+
+        // Sets the choice mode of the GridView depending if the running device
+        // is a tablet or not
         if (ImageConfig.IsTablet()) {
             mGridView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         } else {
@@ -71,6 +74,7 @@ public class PhotoGridFragment extends PhotoFragment {
         mProgressBar = (ProgressBar) view.findViewById(android.R.id.progress);
         return view;
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -87,28 +91,28 @@ public class PhotoGridFragment extends PhotoFragment {
         loadImages();
     }
 
+    /**
+     *  Loads by default the latest images from the service flickr.interestingness.getList()
+     */
     private void loadImages() {
         showProgressBar(true);
         mIsLoading = true;
         LoadImagesAPI.getPhotoList(mPage, mPhotosListener, mErrorListener);
     }
 
+    /**
+     *  Loads by default the latest images from the service flickr.photos.search()
+     */
     private void searchImages() {
         showProgressBar(true);
         mIsLoading = true;
         LoadImagesAPI.getSearchPhoto(mPage, mSearchText, mPhotosListener, mErrorListener);
     }
 
-    private void updateGridView(List<PhotoObject> list) {
-        if (mAdapter == null) {
-            mAdapter = new PhotoAdapter(getActivity());
-            mGridView.setAdapter(mAdapter);
-            mAdapter.setPhotos(mPhotoObjectList);
-        } else {
-            mAdapter.addPhotos(list);
-        }
-    }
 
+    /**
+     * Hides or displays the progress bar
+     */
     private void showProgressBar(boolean show) {
         mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
     }
@@ -122,7 +126,17 @@ public class PhotoGridFragment extends PhotoFragment {
             if (photos.getPhotoInfo() != null) {
                 mTotalPages = photos.getPhotoInfo().getPages();
                 mPhotoObjectList.addAll(photos.getPhotoInfo().getPhotoList());
-                updateGridView(photos.getPhotoInfo().getPhotoList());
+
+                if (mAdapter == null) {
+                    mAdapter = new PhotoAdapter(getActivity());
+                    mGridView.setAdapter(mAdapter);
+                    mAdapter.setPhotos(mPhotoObjectList);
+                }
+
+                if (mPage == 1 && ImageConfig.IsTablet()) {
+                    checkFirstPosition();
+                }
+                mPage++;
             } else {
                 Log.e(TAG, "Photo response is empty");
             }
@@ -140,6 +154,7 @@ public class PhotoGridFragment extends PhotoFragment {
         }
     };
 
+
     private AbsListView.OnScrollListener gridScrollListener = new AbsListView.OnScrollListener() {
 
         @Override
@@ -149,8 +164,9 @@ public class PhotoGridFragment extends PhotoFragment {
 
         @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            // Calls the corresponding service to display more images when the user has reach the end of the page
             if (!mIsLoading && mPage < mTotalPages && (firstVisibleItem + visibleItemCount) >= mPhotoObjectList.size()) {
-                mPage++;
                 Log.i(TAG, "Displaying page: " + mPage + " out of: " + mTotalPages);
                 if (mIsSearching) {
                     searchImages();
@@ -164,27 +180,48 @@ public class PhotoGridFragment extends PhotoFragment {
     private AdapterView.OnItemClickListener gridItemClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            PhotoObject photoObject = mPhotoObjectList.get(position);
-
-            String photoUrl = LoadImagesAPI.getImageEndpoint(photoObject.getFarm(), photoObject.getServer(), photoObject.getId(), photoObject.getSecret());
-
-            mListener.setPhotoUrl(photoUrl);
-            mListener.setPhotoDescription(photoObject.getTitle());
-
-
-            if (ImageConfig.IsTablet()) {
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.detail_fragment, PhotoDetailFragment.newInstance(), PhotoDetailFragment.TAG)
-                        .commit();
-            } else {
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.grid_fragment, PhotoDetailFragment.newInstance(), PhotoDetailFragment.TAG)
-                        .addToBackStack(null).commit();
-            }
+            performClick(position);
         }
     };
 
+
+    /**
+     * Checks the first position of the gridview
+     * This method should be called only when running in tablets
+     */
+    private void checkFirstPosition() {
+        mGridView.setItemChecked(0, true);
+        performClick(0);
+    }
+
+
+    /**
+     *  Method called to when a click action is executed
+     */
+    private void performClick(int position) {
+        PhotoObject photoObject = mPhotoObjectList.get(position);
+
+        String photoUrl = LoadImagesAPI.getImageEndpoint(photoObject.getFarm(), photoObject.getServer(), photoObject.getId(), photoObject.getSecret());
+
+        mListener.setPhotoUrl(photoUrl);
+        mListener.setPhotoDescription(photoObject.getTitle());
+
+
+        if (ImageConfig.IsTablet()) {
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_fragment, PhotoDetailFragment.newInstance(), PhotoDetailFragment.TAG)
+                    .commit();
+        } else {
+            setHasOptionsMenu(false);
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.grid_fragment, PhotoDetailFragment.newInstance(), PhotoDetailFragment.TAG)
+                    .addToBackStack(null).commit();
+        }
+    }
+
+    /**
+     * Query Listener used in the search view of the actionbar
+     */
     private SearchView.OnQueryTextListener querySearchListener = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String s) {
@@ -192,6 +229,9 @@ public class PhotoGridFragment extends PhotoFragment {
             mSearchText = s;
             mPage = 1;
             mAdapter.clearAll();
+            if (ImageConfig.IsTablet()) {
+                mGridView.setItemChecked(mGridView.getCheckedItemPosition(), false);
+            }
             searchImages();
             return false;
         }
