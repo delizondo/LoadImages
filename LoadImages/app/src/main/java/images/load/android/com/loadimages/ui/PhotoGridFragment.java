@@ -212,7 +212,6 @@ public class PhotoGridFragment extends PhotoFragment {
                     .replace(R.id.detail_fragment, PhotoDetailFragment.newInstance(), PhotoDetailFragment.TAG)
                     .commit();
         } else {
-            setHasOptionsMenu(false);
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.grid_fragment, PhotoDetailFragment.newInstance(), PhotoDetailFragment.TAG)
                     .addToBackStack(null).commit();
